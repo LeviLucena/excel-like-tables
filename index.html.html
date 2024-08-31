@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<!-- ====================================================================== -->
+<!-- Desenvolvido por Levi Lucena - linkedin.com/in/levilucena -->
+<!-- ====================================================================== -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabelas Estilo Excel</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        /* Estilos para um visual estilo Excel */
+        .excel-like-table {
+            macargin-top: 20px;
+        }
+        .tabs-container {
+            margin-bottom: 20px;
+        }
+        .tab-pane {
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+        .tab-menu {
+            margin-bottom: 20px;
+        }
+        .btn-add, .btn-edit, .btn-action {
+            margin: 5px;
+        }
+        .modal-body input, .modal-body select {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Tabelas Estilo Excel</h2>
+        <div class="btn-group">
+            <button class="btn btn-primary btn-action" id="renamePageTitle"><i class="fa fa-edit"></i> Renomear Título</button>
+            <button class="btn btn-success btn-action" id="saveData"><i class="fa fa-save"></i> Salvar</button>
+            <button class="btn btn-warning btn-action" id="clearData"><i class="fa fa-eraser"></i> Limpar</button>
+            <button class="btn btn-info btn-action" id="exportData"><i class="fa fa-download"></i> Exportar</button>
+            <button class="btn btn-primary btn-action" id="printData"><i class="fa fa-print"></i> Imprimir</button>
+        </div>
+        <ul class="nav nav-tabs tabs-container">
+            <li class="active"><a href="#tab1" data-toggle="tab">Planilha 1</a></li>
+            <li><a href="#tab2" data-toggle="tab">Planilha 2</a></li>
+            <li><a href="#tab3" data-toggle="tab">Planilha 3</a></li>
+            <li><a href="#tab4" data-toggle="tab">Planilha 4</a></li>
+            <li><a href="#tab5" data-toggle="tab">Planilha 5</a></li>
+            <li><a href="#" id="addTab"><i class="fa fa-plus"></i></a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="tab1" class="tab-pane active">
+                <div class="btn-group">
+                    <button class="btn btn-primary btn-add" id="addRow1"><i class="fa fa-plus"></i> Adicionar Linha</button>
+                    <button class="btn btn-primary btn-add" id="addColumn1"><i class="fa fa-plus"></i> Adicionar Coluna</button>
+                    <button class="btn btn-primary btn-edit" id="renameColumn1"><i class="fa fa-edit"></i> Renomear Coluna</button>
+                </div>
+                <table id="table1" class="table table-striped table-bordered excel-like-table">
+                    <thead>
+                        <tr>
+                            <th>Coluna 1</th>
+                            <th>Coluna 2</th>
+                            <th>Coluna 3</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td contenteditable="true">Celula 1</td>
+                            <td contenteditable="true">Celula 2</td>
+                            <td contenteditable="true">Celula 3</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Replicar para as outras abas -->
+            <!-- Exemplo para aba 2 -->
+            <div id="tab2" class="tab-pane">
+                <div class="btn-group">
+                    <button class="btn btn-primary btn-add" id="addRow2"><i class="fa fa-plus"></i> Adicionar Linha</button>
+                    <button class="btn btn-primary btn-add" id="addColumn2"><i class="fa fa-plus"></i> Adicionar Coluna</button>
+                    <button class="btn btn-primary btn-edit" id="renameColumn2"><i class="fa fa-edit"></i> Renomear Coluna</button>
+                </div>
+                <table id="table2" class="table table-striped table-bordered excel-like-table">
+                    <thead>
+                        <tr>
+                            <th>Coluna 1</th>
+                            <th>Coluna 2</th>
+                            <th>Coluna 3</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td contenteditable="true">Celula 1</td>
+                            <td contenteditable="true">Celula 2</td>
+                            <td contenteditable="true">Celula 3</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Repita para as outras abas -->
+        </div>
+    </div>
+
+    <!-- Modal para renomear coluna -->
+    <div class="modal fade" id="renameColumnModal" tabindex="-1" role="dialog" aria-labelledby="renameColumnLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="renameColumnLabel">Renomear Coluna</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="columnSelect">Selecionar Coluna:</label>
+                    <select id="columnSelect" class="form-control"></select>
+                    <label for="columnName">Novo Nome da Coluna:</label>
+                    <input type="text" id="columnName" class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveColumnName">Salvar Alterações</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para renomear título -->
+    <div class="modal fade" id="renameTitleModal" tabindex="-1" role="dialog" aria-labelledby="renameTitleLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="renameTitleLabel">Renomear Título da Página</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="pageTitle">Novo Título da Página:</label>
+                    <input type="text" id="pageTitle" class="form-control" value="Tabelas Estilo Excel">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="savePageTitle">Salvar Alterações</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function initializeDataTable(tableId) {
+                $(tableId).DataTable({
+                    paging: false,
+                    searching: false
+                });
+            }
+
+            function setupTableButtons(tabCount) {
+                $(`#addRow${tabCount}`).click(function() {
+                    var table = $(`#table${tabCount}`).DataTable();
+                    var columnCount = table.columns().header().length;
+                    var newRow = '<tr>';
+                    for (var i = 0; i < columnCount; i++) {
+                        newRow += '<td contenteditable="true">Nova Célula</td>';
+                    }
+                    newRow += '</tr>';
+                    table.row.add($(newRow)).draw();
+                });
+
+                $(`#addColumn${tabCount}`).click(function() {
+                    var table = $(`#table${tabCount}`).DataTable();
+                    var columnCount = table.columns().header().length;
+                    var newHeader = '<th>Coluna ' + (columnCount + 1) + '</th>';
+                    $(`#table${tabCount} thead tr`).append(newHeader);
+                    $(`#table${tabCount} tbody tr`).each(function() {
+                        $(this).append('<td contenteditable="true">Nova Célula</td>');
+                    });
+
+                    // Atualizar DataTable
+                    table.columns.adjust().draw();
+                });
+
+                $(`#renameColumn${tabCount}`).click(function() {
+                    $('#renameColumnModal').modal('show');
+                    // Preencher a lista de seleção com os cabeçalhos das colunas
+                    var columnSelect = $('#columnSelect');
+                    columnSelect.empty();
+                    $(`#table${tabCount} thead th`).each(function(index) {
+                        columnSelect.append($('<option>').text($(this).text()).val(index));
+                    });
+
+                    $('#saveColumnName').off('click').on('click', function() {
+                        var columnIndex = $('#columnSelect').val();
+                        var newName = $('#columnName').val();
+                        $(`#table${tabCount} thead th`).eq(columnIndex).text(newName);
+                        $('#renameColumnModal').modal('hide');
+                    });
+                });
+            }
+
+            // Inicializar DataTables e botões para cada tabela
+            initializeDataTable('#table1');
+            initializeDataTable('#table2');
+            // Repita para as outras tabelas
+
+            // Configurar botões para as tabelas existentes
+            setupTableButtons(1);
+            setupTableButtons(2);
+
+            // Adicionar funcionalidade de adicionar abas
+            $('#addTab').click(function(e) {
+                e.preventDefault();
+                var tabCount = $('.nav-tabs li').length + 1;
+                var newTab = `<li><a href="#tab${tabCount}" data-toggle="tab">Planilha ${tabCount}</a></li>`;
+                $('.nav-tabs').append(newTab);
+
+                var newContent = `<div id="tab${tabCount}" class="tab-pane">
+                                    <div class="btn-group">
+                                        <button class="btn btn-primary btn-add" id="addRow${tabCount}"><i class="fa fa-plus"></i> Adicionar Linha</button>
+                                        <button class="btn btn-primary btn-add" id="addColumn${tabCount}"><i class="fa fa-plus"></i> Adicionar Coluna</button>
+                                        <button class="btn btn-primary btn-edit" id="renameColumn${tabCount}"><i class="fa fa-edit"></i> Renomear Coluna</button>
+                                    </div>
+                                    <table id="table${tabCount}" class="table table-striped table-bordered excel-like-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Coluna 1</th>
+                                                <th>Coluna 2</th>
+                                                <th>Coluna 3</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td contenteditable="true">Celula 1</td>
+                                                <td contenteditable="true">Celula 2</td>
+                                                <td contenteditable="true">Celula 3</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                  </div>`;
+                $('.tab-content').append(newContent);
+                initializeDataTable(`#table${tabCount}`);
+                setupTableButtons(tabCount);
+            });
+
+            // Função para renomear o título da página
+            $('#renamePageTitle').click(function() {
+                $('#renameTitleModal').modal('show');
+                $('#savePageTitle').off('click').on('click', function() {
+                    var newTitle = $('#pageTitle').val();
+                    document.title = newTitle;
+                    $('#renameTitleModal').modal('hide');
+                });
+            });
+
+            // Funções para botões de ação
+            $('#saveData').click(function() {
+                alert('Dados salvos!');
+                // Adicione aqui a funcionalidade de salvar os dados
+            });
+
+            $('#clearData').click(function() {
+                $('.tab-content .tab-pane.active table tbody').empty();
+                alert('Dados limpos!');
+                // Adicione aqui a funcionalidade de limpar os dados
+            });
+
+            $('#exportData').click(function() {
+                alert('Dados exportados!');
+                // Adicione aqui a funcionalidade de exportar os dados
+            });
+
+            $('#printData').click(function() {
+                window.print();
+            });
+        });
+    </script>
+</body>
+</html>
